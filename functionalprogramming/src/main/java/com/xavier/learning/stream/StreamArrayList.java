@@ -148,6 +148,16 @@ public class StreamArrayList {
         trackNames4.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toSet());
     }
 
+    public static List<String> getNamesAndOrigins(List<Artist> artists) {
+        return artists.stream()
+                .flatMap(artist ->Stream.of(artist.getName(),artist.getNationality()))
+                .collect(Collectors.toList());
+    }
+
+    public static int addUp(Stream<Integer> numbers) {
+        return numbers.reduce(0, (acc, x) -> acc + x);
+    }
+
     public static boolean isDigit(String str) {
         char firstChar = str.charAt(0);
         return firstChar >='0' && firstChar <='9';
