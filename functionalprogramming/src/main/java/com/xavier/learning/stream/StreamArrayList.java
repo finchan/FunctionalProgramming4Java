@@ -16,7 +16,7 @@ public class StreamArrayList {
     public static List<Album> albums = Arrays.asList(SampleData.manyTrackAlbum, SampleData.sampleShortAlbum, SampleData.aLoveSupreme);
 
     public static void main(String[] args) {
-
+        printTrackLengthStatistics(album);
     }
 
     //Stream - > count()
@@ -169,6 +169,17 @@ public class StreamArrayList {
         return artists.stream()
                 .map(artist -> artist.getMembers().count())
                 .reduce(0L, (acc, number) -> acc+number).intValue();
+    }
+
+    public static void printTrackLengthStatistics(Album album) {
+        IntSummaryStatistics statics = album.getTracks()
+                .mapToInt(track -> track.getLength())
+                .summaryStatistics();
+        System.out.printf("Max: %d, Min: %d, Ave: %f, Sum: %d",
+                statics.getMax(),
+                statics.getMin(),
+                statics.getAverage(),
+                statics.getSum());
     }
 
     public static int addUp(Stream<Integer> numbers) {
