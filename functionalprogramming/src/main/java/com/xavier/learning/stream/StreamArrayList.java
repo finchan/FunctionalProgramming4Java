@@ -13,8 +13,10 @@ import java.util.stream.Stream;
 public class StreamArrayList {
     public static List<Artist> allArtists = SampleData.membersOfTheBeatles;
     public static Album album = SampleData.manyTrackAlbum;
+    public static List<Album> albums = Arrays.asList(SampleData.manyTrackAlbum, SampleData.sampleShortAlbum, SampleData.aLoveSupreme);
+
     public static void main(String[] args) {
-        streamForEach();
+
     }
 
     //Stream - > count()
@@ -148,10 +150,25 @@ public class StreamArrayList {
         trackNames4.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toSet());
     }
 
-    public static List<String> getNamesAndOrigins(List<Artist> artists) {
-        return artists.stream()
-                .flatMap(artist ->Stream.of(artist.getName(),artist.getNationality()))
+    public static List<Album> getThreeAlbumsList(List<Album> albums){
+        return albums.stream()
+                .filter(album -> album.getTracks().count() <=3)
                 .collect(Collectors.toList());
+    }
+
+    public static List<String> getNamesAndOrigins(List<Artist> artists) {
+        List<String> list =  artists.stream()
+                .flatMap(artist->Stream.of(artist.getName()+"-"+artist.getNationality()))
+                //map(artist->artist.getName()+"-"+artist.getNationality())
+                .collect(Collectors.toList());
+        list.forEach(name->System.out.println(name));
+        return list;
+    }
+
+    public static int getMembersCount(List<Artist> artists) {
+        return artists.stream()
+                .map(artist -> artist.getMembers().count())
+                .reduce(0L, (acc, number) -> acc+number).intValue();
     }
 
     public static int addUp(Stream<Integer> numbers) {
