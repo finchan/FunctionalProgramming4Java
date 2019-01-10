@@ -16,7 +16,7 @@ public class StreamArrayList {
     public static List<Album> albums = Arrays.asList(SampleData.manyTrackAlbum, SampleData.sampleShortAlbum, SampleData.aLoveSupreme);
 
     public static void main(String[] args) {
-        printTrackLengthStatistics(album);
+        OptionalTest();
     }
 
     //Stream - > count()
@@ -180,6 +180,21 @@ public class StreamArrayList {
                 statics.getMin(),
                 statics.getAverage(),
                 statics.getSum());
+    }
+
+    public static void OptionalTest() {
+        Optional<String> a = Optional.of("a");
+        System.out.println(a.get());
+
+        Optional emptyOptional = Optional.empty();
+        Optional alsoEmpty = Optional.ofNullable(null);
+        System.out.println(a.isPresent());
+        System.out.println(emptyOptional.isPresent());
+        System.out.println(alsoEmpty.isPresent());
+
+        System.out.println(alsoEmpty.orElse("b"));
+        System.out.println(emptyOptional.orElseGet(()->"c"));
+        System.out.println(a.orElse("empty"));
     }
 
     public static int addUp(Stream<Integer> numbers) {
