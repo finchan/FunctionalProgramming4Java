@@ -7,13 +7,19 @@ import com.xavier.learning.model.Track;
 
 import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.averagingInt;
+import static java.util.stream.Collectors.maxBy;
 
 public class StreamArrayList {
     public static List<Artist> allArtists = SampleData.membersOfTheBeatles;
     public static Album album = SampleData.manyTrackAlbum;
-    public static List<Album> albums = Arrays.asList(SampleData.manyTrackAlbum, SampleData.sampleShortAlbum, SampleData.aLoveSupreme);
+    public static List<Album> albums = asList(SampleData.manyTrackAlbum, SampleData.sampleShortAlbum, SampleData.aLoveSupreme);
 
     public static void main(String[] args) {
         OptionalTest();
@@ -54,7 +60,7 @@ public class StreamArrayList {
 
     //Stream - flatMap
     public static void streamFlatMap() {
-        List<Integer>  together = Stream.of(Arrays.asList(1,2), Arrays.asList(3,4))
+        List<Integer>  together = Stream.of(asList(1,2), asList(3,4))
                 .flatMap(numbers -> numbers.stream())
                 .collect(Collectors.toList());
         together.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toList());
@@ -62,22 +68,22 @@ public class StreamArrayList {
 
     //Stream - min
     public static void streamMin() {
-        List<Track> tracks = Arrays.asList(new Track("Bakai", 524),
+        List<Track> tracks = asList(new Track("Bakai", 524),
                 new Track("Violets for Your Furs", 378),
                 new Track("Time Was", 451));
         Track shortTrack = tracks.stream()
-                .min(Comparator.comparing(track->track.getLength()))
+                .min(comparing(track->track.getLength()))
                 .get();
         System.out.println(shortTrack.getName());
     }
 
     //Stream - max
     public static void streamMax() {
-        List<Track> tracks = Arrays.asList(new Track("Bakai", 524),
+        List<Track> tracks = asList(new Track("Bakai", 524),
                 new Track("Violets for Your Furs", 378),
                 new Track("Time Was", 451));
         Track longTrack = tracks.stream()
-                .max(Comparator.comparing(track->track.getLength()))
+                .max(comparing(track->track.getLength()))
                 .get();
         System.out.println(longTrack.getName());
     }
@@ -111,7 +117,7 @@ public class StreamArrayList {
 
     //Stream - forEach
     public static void streamForEach(){
-        List<Album> albums = Arrays.asList(SampleData.aLoveSupreme, SampleData.sampleShortAlbum, SampleData.manyTrackAlbum);
+        List<Album> albums = asList(SampleData.aLoveSupreme, SampleData.sampleShortAlbum, SampleData.manyTrackAlbum);
         Set<String> trackNames = new HashSet<>();
         albums.stream()
                 .forEach(album -> {
@@ -201,8 +207,37 @@ public class StreamArrayList {
         return numbers.reduce(0, (acc, x) -> acc + x);
     }
 
+
     public static boolean isDigit(String str) {
         char firstChar = str.charAt(0);
         return firstChar >='0' && firstChar <='9';
+    }
+
+    public static void sortedList() {
+        Set<Integer> number = new HashSet<>(asList(1,2,3,4));
+        List<Integer> list =number.stream().sorted()
+                .collect(Collectors.toList());
+
+        List<Integer> numbers = Arrays.asList(1,2,3,4);
+        List<Integer> stillOrdered = numbers.stream()
+                .map(x->x+1)
+                .collect(Collectors.toList());
+        Set<Integer> unsorted = new HashSet<>(numbers);
+        List<Integer> stillUnsorted = unsorted.stream()
+                .map(x->x+1)
+                .collect(Collectors.toList());
+        stillOrdered.stream().collect(Collectors.toList());
+        stillOrdered.stream().collect(Collectors.toCollection(TreeSet:new));
+    }
+
+    public Optional<Artist> biggestGroup(Stream<Artist> artists) {
+        Function<Artist, Long> getCount = artist -> artist.getMembers().count();
+        return artists.collect(maxBy(comparing(getCount)));
+//        return artists.collect(minBy(comparing(getCount)));
+    }
+
+    public double averageNumberOfTracks(List<Album> albums) {
+        return albums.stream()
+                .collect(averagingInt(album->album.getMusicianList().size()));
     }
 }
