@@ -13,8 +13,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.averagingInt;
-import static java.util.stream.Collectors.maxBy;
+import static java.util.stream.Collectors.*;
 
 public class StreamArrayList {
     public static List<Artist> allArtists = SampleData.membersOfTheBeatles;
@@ -38,32 +37,41 @@ public class StreamArrayList {
 
     //Stream - of > collect -> Stream converted to List
     public static void streamOfCollect() {
-        List<String> collected = Stream.of("a", "b","c").collect(Collectors.toList());
+        List<String> collected = Stream.of("a", "b", "c").collect(Collectors.toList());
     }
 
     //Stream - map -> convert element
-    public static void streamMap(){
+    public static void streamMap() {
         List<String> collected = Stream.of("a", "b", "hello")
                 .map(string -> string.toUpperCase())
                 .collect(Collectors.toList());
-        collected.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toList());
+        collected.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toList());
     }
 
     //Stream - filter -> traverse a list
-    public static void streamFiilter(){
+    public static void streamFiilter() {
         List<String> beginningWithNumbers
                 = Stream.of("a", "1abc", "abc1")
                 .filter(str -> isDigit(str))
                 .collect(Collectors.toList());
-        beginningWithNumbers.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toList());
+        beginningWithNumbers.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toList());
     }
 
     //Stream - flatMap
     public static void streamFlatMap() {
-        List<Integer>  together = Stream.of(asList(1,2), asList(3,4))
+        List<Integer> together = Stream.of(asList(1, 2), asList(3, 4))
                 .flatMap(numbers -> numbers.stream())
                 .collect(Collectors.toList());
-        together.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toList());
+        together.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toList());
     }
 
     //Stream - min
@@ -72,7 +80,7 @@ public class StreamArrayList {
                 new Track("Violets for Your Furs", 378),
                 new Track("Time Was", 451));
         Track shortTrack = tracks.stream()
-                .min(comparing(track->track.getLength()))
+                .min(comparing(track -> track.getLength()))
                 .get();
         System.out.println(shortTrack.getName());
     }
@@ -83,26 +91,26 @@ public class StreamArrayList {
                 new Track("Violets for Your Furs", 378),
                 new Track("Time Was", 451));
         Track longTrack = tracks.stream()
-                .max(comparing(track->track.getLength()))
+                .max(comparing(track -> track.getLength()))
                 .get();
         System.out.println(longTrack.getName());
     }
 
     //Stream - reduce (SUM)
     public static void streamReduceSum() {
-        int count = Stream.of(1,2,3)
-                .reduce(0, (acc, element) -> acc+element);
+        int count = Stream.of(1, 2, 3)
+                .reduce(0, (acc, element) -> acc + element);
         System.out.println(count);
     }
 
     //Stream - reduce (SUM - expend reduce)
     public static void streamReduceSumExpand() {
-        BinaryOperator<Integer> accumulator = (acc, element) -> acc+element;
-        int count =accumulator.apply(
-            accumulator.apply(
-                    accumulator.apply(0,1),
-            2),
-        3);
+        BinaryOperator<Integer> accumulator = (acc, element) -> acc + element;
+        int count = accumulator.apply(
+                accumulator.apply(
+                        accumulator.apply(0, 1),
+                        2),
+                3);
         System.out.println(count);
     }
 
@@ -112,24 +120,30 @@ public class StreamArrayList {
                 .filter(artist -> artist.getName().startsWith("John"))
                 .map(artist -> artist.getNationality())
                 .collect(Collectors.toSet());
-        origins.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toSet());
+        origins.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toSet());
     }
 
     //Stream - forEach
-    public static void streamForEach(){
+    public static void streamForEach() {
         List<Album> albums = asList(SampleData.aLoveSupreme, SampleData.sampleShortAlbum, SampleData.manyTrackAlbum);
         Set<String> trackNames = new HashSet<>();
         albums.stream()
                 .forEach(album -> {
                     album.getTracks()
                             .forEach(track -> {
-                                if(track.getLength() > 60) {
+                                if (track.getLength() > 60) {
                                     String name = track.getName();
                                     trackNames.add(name);
                                 }
                             });
                 });
-        trackNames.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toSet());
+        trackNames.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toSet());
 
         Set<String> trackNames2 = new HashSet<>();
         albums.stream()
@@ -139,42 +153,51 @@ public class StreamArrayList {
                             .map(track -> track.getName())
                             .forEach(name -> trackNames2.add(name));
                 });
-        trackNames2.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toSet());
+        trackNames2.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toSet());
 
         Set<String> trackNames3 = new HashSet<>();
         albums.stream()
-                .flatMap(album2 ->album2.getTracks())
+                .flatMap(album2 -> album2.getTracks())
                 .filter(track -> track.getLength() > 60)
                 .map(track -> track.getName())
                 .forEach(name -> trackNames3.add(name));
-        trackNames3.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toSet());
+        trackNames3.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toSet());
 
-        Set<String> trackNames4  = albums.stream()
-                .flatMap(album2 ->album2.getTracks())
+        Set<String> trackNames4 = albums.stream()
+                .flatMap(album2 -> album2.getTracks())
                 .filter(track -> track.getLength() > 60)
                 .map(track -> track.getName()).collect(Collectors.toSet());
-        trackNames4.stream().filter(str -> {System.out.println(str); return true;}).collect(Collectors.toSet());
+        trackNames4.stream().filter(str -> {
+            System.out.println(str);
+            return true;
+        }).collect(Collectors.toSet());
     }
 
-    public static List<Album> getThreeAlbumsList(List<Album> albums){
+    public static List<Album> getThreeAlbumsList(List<Album> albums) {
         return albums.stream()
-                .filter(album -> album.getTracks().count() <=3)
+                .filter(album -> album.getTracks().count() <= 3)
                 .collect(Collectors.toList());
     }
 
     public static List<String> getNamesAndOrigins(List<Artist> artists) {
-        List<String> list =  artists.stream()
-                .flatMap(artist->Stream.of(artist.getName()+"-"+artist.getNationality()))
+        List<String> list = artists.stream()
+                .flatMap(artist -> Stream.of(artist.getName() + "-" + artist.getNationality()))
                 //map(artist->artist.getName()+"-"+artist.getNationality())
                 .collect(Collectors.toList());
-        list.forEach(name->System.out.println(name));
+        list.forEach(name -> System.out.println(name));
         return list;
     }
 
     public static int getMembersCount(List<Artist> artists) {
         return artists.stream()
                 .map(artist -> artist.getMembers().count())
-                .reduce(0L, (acc, number) -> acc+number).intValue();
+                .reduce(0L, (acc, number) -> acc + number).intValue();
     }
 
     public static void printTrackLengthStatistics(Album album) {
@@ -199,7 +222,7 @@ public class StreamArrayList {
         System.out.println(alsoEmpty.isPresent());
 
         System.out.println(alsoEmpty.orElse("b"));
-        System.out.println(emptyOptional.orElseGet(()->"c"));
+        System.out.println(emptyOptional.orElseGet(() -> "c"));
         System.out.println(a.orElse("empty"));
     }
 
@@ -210,24 +233,24 @@ public class StreamArrayList {
 
     public static boolean isDigit(String str) {
         char firstChar = str.charAt(0);
-        return firstChar >='0' && firstChar <='9';
+        return firstChar >= '0' && firstChar <= '9';
     }
 
     public static void sortedList() {
-        Set<Integer> number = new HashSet<>(asList(1,2,3,4));
-        List<Integer> list =number.stream().sorted()
+        Set<Integer> number = new HashSet<>(asList(1, 2, 3, 4));
+        List<Integer> list = number.stream().sorted()
                 .collect(Collectors.toList());
 
-        List<Integer> numbers = Arrays.asList(1,2,3,4);
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
         List<Integer> stillOrdered = numbers.stream()
-                .map(x->x+1)
+                .map(x -> x + 1)
                 .collect(Collectors.toList());
         Set<Integer> unsorted = new HashSet<>(numbers);
         List<Integer> stillUnsorted = unsorted.stream()
-                .map(x->x+1)
+                .map(x -> x + 1)
                 .collect(Collectors.toList());
         stillOrdered.stream().collect(Collectors.toList());
-        stillOrdered.stream().collect(Collectors.toCollection(TreeSet:new));
+        stillOrdered.stream().collect(Collectors.toCollection(TreeSet::new));
     }
 
     public Optional<Artist> biggestGroup(Stream<Artist> artists) {
@@ -238,6 +261,53 @@ public class StreamArrayList {
 
     public double averageNumberOfTracks(List<Album> albums) {
         return albums.stream()
-                .collect(averagingInt(album->album.getMusicianList().size()));
+                .collect(averagingInt(album -> album.getMusicianList().size()));
+    }
+
+    public Map<Boolean, List<Artist>> bandsAndSoloRef(Stream<Artist> artists) {
+        return artists.collect(partitioningBy(Artist::isSolo));
+    }
+
+    public Map<Artist, List<Album>> albumsByArtist(Stream<Album> albums) {
+        return albums.collect(groupingBy(Album::getMainMusician));
+    }
+
+    public static String getArtistName(List<Artist> artists) {
+        String result = artists.stream()
+                .map(Artist::getName)
+                .collect(Collectors.joining(", ", "[", "]"));
+        return result;
+    }
+
+    public static Map<Artist, Integer> getAlbumSizeByArtist(Stream<Album> albums) {
+        Map<Artist, List<Album>> albumsByArtist
+                = albums.collect(Collectors.groupingBy(Album::getMainMusician));
+        Map<Artist, Integer> numberOfAlbums = new HashMap<>();
+        for (Map.Entry<Artist, List<Album>> entry : albumsByArtist.entrySet()) {
+            numberOfAlbums.put(entry.getKey(), entry.getValue().size());
+        }
+        return numberOfAlbums;
+    }
+
+    public static Map<Artist, Long> numbersOfAlbums(Stream<Album> albums) {
+        return albums.collect(groupingBy(Album::getMainMusician, counting()));
+    }
+
+    public static Map<Artist, List<String>> nameOfAlbumsDumb(Stream<Album> albums){
+        Map<Artist, List<Album>> albumsByArtist
+                = albums.collect(Collectors.groupingBy(Album::getMainMusician));
+        Map<Artist, List<String>> nameOfAlbums = new HashMap<>();
+        for(Map.Entry<Artist, List<Album>> entry : albumsByArtist.entrySet()) {
+            nameOfAlbums.put(entry.getKey(), entry.getValue()
+            .stream()
+            .map(Album::getName)
+            .collect(toList()));
+        }
+        return nameOfAlbums;
+    }
+
+    public static Map<Artist, List<String>> nameOfAlbums(Stream<Album> albums) {
+        return albums.collect(groupingBy(Album::getMainMusician,
+                mapping(Album::getName, toList())));
     }
 }
